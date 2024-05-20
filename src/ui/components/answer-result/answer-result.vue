@@ -14,7 +14,7 @@ defineProps<Props>()
 </script>
 
 <template>
-    <Flex direction="column" justify="center" align="center" height="h-screen" gap="4">
+    <Flex v-if="answer !== undefined" direction="column" justify="center" align="center" height="h-screen" gap="4">
         <Heading>{{ answer }}</Heading>
         <Text>{{ answer === 'correct' ? 'You gained 5 seconds' : 'You lost 10 seconds' }}</Text>
     </Flex>

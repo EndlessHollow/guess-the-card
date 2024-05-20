@@ -15,68 +15,68 @@ import { shuffleElements } from '@helpers/shuffle-elements';
 import { Hand } from 'pokersolver'
 
 import { gameKey } from '@/keys';
-import type { TAnswer, TCard, TGame, TOptions } from '@/types';
+import type { TAnswer, TCard, TGame } from '@/types';
 import { injectStrict } from '@helpers/inject-strict';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
-const game = injectStrict<TGame>(gameKey)
+const CORRECT_ANSWER_VALUE = 5
+const INCORRECT_ANSWER_VALUE = -10
 
+const game = injectStrict<TGame>(gameKey);
 let overlayTimerId: number;
 
-const options = ref<TOptions[]>([]);
 const randomCards = ref<TCard[]>([]);
-const answerState = ref<TAnswer>()
+const answerState = ref<TAnswer>();
 
-function createOptions() {
-  randomCards.value = getRandomElements(cards, 5)
-  const cardTypes = randomCards.value.map(card => card.type)
-
-  const result = Hand.solve(cardTypes)
-  const randomAnswers = getRandomElements(hands, 2, result.name)
-  console.log({ result })
-  const shuffledAnswers: string[] = shuffleElements([result.name, ...randomAnswers])
-
-  options.value = shuffledAnswers.map((answer) => ({
+const cardTypes = computed(() => randomCards.value.map(card => card.type));
+const pokerResult = computed(() => {
+  if (!cardTypes.value.length) return;
+  return Hand.solve(cardTypes.value);
+});
+const options = computed(() => {
+  if (!pokerResult.value) {
+    return []
+  };
+  const randomAnswers = getRandomElements(hands, 2, pokerResult.value.name);
+  const shuffledAnswers = shuffleElements(randomAnswers);
+  return shuffledAnswers.map(answer => ({
     item: answer,
     label: answer,
-    onClick: (answer: string) => handleAnswer(answer, result.name)
+    onClick: () => handleAnswer(answer, pokerResult.value.name)
   }));
+});
 
+function handleAnswer(selectedAnswer: string, correctAnswer: string) {
+  const isCorrect = selectedAnswer === correctAnswer;
+  adjustTime(isCorrect);
+  updateScore(isCorrect);
+  transitionGameState();
 }
 
-function handleAnswer(answer: string, correctAnswer: string) {
-  if(!game.gameState.value) return
-  if (answer === correctAnswer) {
-    game.timeLeft.value += 10;
-    if (game.timeLeft.value > 100) {
-      game.timeLeft.value = 100;
-    }
-    game.gameState.value.score++
-    answerState.value = 'correct'
-  } else {
-    game.timeLeft.value -= 20;
-    answerState.value = 'incorrect'
-  }
-  game.gameState.value.status = 'idle'
+function adjustTime(isCorrect: boolean) {
+  const timeAdjustment = isCorrect ? CORRECT_ANSWER_VALUE : INCORRECT_ANSWER_VALUE;
+  game.timeLeft.value = Math.min(100, Math.max(0, game.timeLeft.value + timeAdjustment));
+}
 
+function updateScore(isCorrect: boolean) {
+  if (isCorrect) {
+    game.gameState.value.score++;
+    answerState.value = 'correct';
+  } else {
+    answerState.value = 'incorrect';
+  }
+}
+function transitionGameState() {
+  game.gameState.value.status = 'idle';
   overlayTimerId = setTimeout(() => {
-    if(!game.gameState.value) return
     game.gameState.value.status = 'in-progress';
     answerState.value = undefined;
-    createOptions();
+    randomCards.value = getRandomElements(cards, 5);
   }, 2000);
-
 }
 
-onMounted(() => {
-  createOptions();
-});
-
-onBeforeUnmount(() => {
-  clearTimeout(overlayTimerId)
-});
-
-
+onMounted(() => randomCards.value = getRandomElements(cards, 5));
+onBeforeUnmount(() => clearTimeout(overlayTimerId));
 </script>
 
 <template>
@@ -90,5 +90,4 @@ onBeforeUnmount(() => {
     </Container>
     <ControlPanel :options="options" />
   </template>
-
 </template>

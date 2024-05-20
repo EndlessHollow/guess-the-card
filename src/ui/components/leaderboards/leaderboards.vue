@@ -13,37 +13,25 @@ import { gameKey } from "@/keys";
 
 const game = injectStrict<TGame>(gameKey)
 
-function getTableValues(data: any) {
-    const result = []
-    for (const key in data) {
+function fetchLeaderboardData() {
+    const leaderboard = [];
 
-        const id = key;
-        const score = data[key];
-        const obj = { id, score };
-
-        result.push(obj);
-    }
-    return result
-}
-
-function getLocalStorageData() {
-    const result: { [key: string]: string } = {}
-
-    for (let i = 0; i <= localStorage.length; i++) {
-        const key: string = localStorage.key(i)!;
-        const value: string | null = localStorage.getItem(key);
-        if (value !== null) {
-            result[key] = value;
+    try {
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key) {
+                const score = localStorage.getItem(key) || '0';
+                leaderboard.push({ id: key, score });
+            }
         }
+    } catch (error) {
+        console.error("Failed to read from localStorage:", error);
     }
-
-    return result
+    
+    return leaderboard.sort((a, b) => parseInt(b.score) - parseInt(a.score));
 }
 
-const localStorageData = getLocalStorageData()
-const tableData = getTableValues(localStorageData)
-const sortedTableData = tableData.sort((a,b) => b.score - a.score)
-
+const sortedTableData = fetchLeaderboardData();
 </script>
 
 <template>

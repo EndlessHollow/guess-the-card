@@ -8,7 +8,7 @@ type Props = {
     options: TOptions[]
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 </script>
 

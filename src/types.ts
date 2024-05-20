@@ -12,8 +12,8 @@ export type TGameState = {
 }
 
 export type TGame = {
-    gameState: Ref<TGameState| undefined> 
-    totalTime: ComputedRef<number>
+    gameState: Ref<TGameState>
+    totalTime: Ref<number>
     timeLeft: WritableComputedRef<number>
     startGame: () => void
 }
