@@ -1,7 +1,7 @@
 import "./assets/main.css";
 
 import { createApp } from "vue";
-import App from "./App.vue";
+import App from "./app.vue";
 import PrimeVue from "primevue/config";
 //TODO: Fix when they finally provide TS support
 // @ts-ignore
