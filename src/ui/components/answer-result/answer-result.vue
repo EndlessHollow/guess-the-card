@@ -1,21 +1,29 @@
 <script setup lang="ts">
-import Flex from '@ui/layout/flex'
-import Heading from '@ui/typography/heading'
-import Text from '@ui/typography/text'
+import Flex from "@ui/layout/flex";
+import Heading from "@ui/typography/heading";
+import Text from "@ui/typography/text";
 
-import type { TAnswer } from '@/types';
+import type { TAnswer } from "@/types";
 
 type Props = {
-    answer: TAnswer | undefined
-}
+  answer: TAnswer | undefined;
+};
 
-defineProps<Props>()
-
+defineProps<Props>();
 </script>
 
 <template>
-    <Flex v-if="answer !== undefined" direction="column" justify="center" align="center" height="h-screen" gap="4">
-        <Heading>{{ answer }}</Heading>
-        <Text>{{ answer === 'correct' ? 'You gained 5 seconds' : 'You lost 10 seconds' }}</Text>
-    </Flex>
+  <Flex
+    v-if="answer !== undefined"
+    direction="column"
+    justify="center"
+    align="center"
+    height="h-screen"
+    gap="4"
+  >
+    <Heading>{{ answer }}</Heading>
+    <Text>{{
+      answer === "correct" ? "You gained 5 seconds" : "You lost 10 seconds"
+    }}</Text>
+  </Flex>
 </template>

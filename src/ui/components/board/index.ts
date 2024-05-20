@@ -1,1 +1,1 @@
-export {default} from './board.vue'
+export { default } from "./board.vue";

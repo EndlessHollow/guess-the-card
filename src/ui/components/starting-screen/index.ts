@@ -1,1 +1,1 @@
-export {default} from './starting-screen.vue'
+export { default } from "./starting-screen.vue";

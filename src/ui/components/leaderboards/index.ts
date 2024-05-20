@@ -1,1 +1,1 @@
-export {default} from './leaderboards.vue'
+export { default } from "./leaderboards.vue";

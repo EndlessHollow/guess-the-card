@@ -1,1 +1,1 @@
-export {default} from './flex.vue'
+export { default } from "./flex.vue";

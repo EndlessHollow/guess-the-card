@@ -1,1 +1,1 @@
-export {default} from "./grid.vue"
+export { default } from "./grid.vue";

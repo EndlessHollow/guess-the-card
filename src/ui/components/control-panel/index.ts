@@ -1,1 +1,1 @@
-export {default} from './control-panel.vue'
+export { default } from "./control-panel.vue";

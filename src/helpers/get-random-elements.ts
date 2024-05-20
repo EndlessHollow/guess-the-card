@@ -1,17 +1,23 @@
-export function getRandomElements<T>(iterable: T[], cnt: number, initialValue?: T): T[] {
-    const filteredIterable = iterable.filter(item => item !== initialValue);
+export function getRandomElements<T>(
+  iterable: T[],
+  cnt: number,
+  initialValue?: T,
+): T[] {
+  const filteredIterable = iterable.filter((item) => item !== initialValue);
 
-    if (cnt > filteredIterable.length) {
-        throw new Error("Count cannot be greater than the number of elements in the iterable.");
-    }
-    
-    const shuffled = filteredIterable.slice().sort(() => Math.random() - 0.5);
+  if (cnt > filteredIterable.length) {
+    throw new Error(
+      "Count cannot be greater than the number of elements in the iterable.",
+    );
+  }
 
-    const result = shuffled.slice(0, cnt)
+  const shuffled = filteredIterable.slice().sort(() => Math.random() - 0.5);
 
-    if(initialValue !== undefined) {
-        result.push(initialValue);
-    }
+  const result = shuffled.slice(0, cnt);
 
-    return result
+  if (initialValue !== undefined) {
+    result.push(initialValue);
+  }
+
+  return result;
 }

@@ -1,1 +1,1 @@
-export {default} from "./information-banner.vue"
+export { default } from "./information-banner.vue";

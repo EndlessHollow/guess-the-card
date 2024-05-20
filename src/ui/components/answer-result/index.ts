@@ -1,1 +1,1 @@
-export {default} from './answer-result.vue'
+export { default } from "./answer-result.vue";

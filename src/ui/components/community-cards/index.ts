@@ -1,1 +1,1 @@
-export {default} from './community-cards.vue'
+export { default } from "./community-cards.vue";
